@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace common\models;
 
 use Yii;
 
@@ -17,6 +17,8 @@ use Yii;
  *
  * @property Bilhetes[] $bilhetes
  * @property Categorias $categoria
+ * @property Favoritos[] $favoritos
+ * @property Imagens $imagens
  * @property Locais $local
  * @property Zonas[] $zonas
  */
@@ -79,6 +81,26 @@ class Evento extends \yii\db\ActiveRecord
     public function getCategoria()
     {
         return $this->hasOne(Categorias::class, ['id' => 'categoria_id']);
+    }
+
+    /**
+     * Gets query for [[Favoritos]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFavoritos()
+    {
+        return $this->hasMany(Favoritos::class, ['evento_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Imagens]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getImagens()
+    {
+        return $this->hasOne(Imagens::class, ['evento_id' => 'id']);
     }
 
     /**
