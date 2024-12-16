@@ -19,6 +19,8 @@ return [
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser', ]
         ],
         'user' => [
             'identityClass' => 'common\models\User',
@@ -45,11 +47,11 @@ return [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'rules' => [
+            /*'rules' => [
                 'class' => 'yii\rest\UrlRule',
-                'controller' => 'api/evento',
+                'controller' => 'api/bilhete', 'api/carrinho', 'api/categoria', 'api/evento', 'api/fatura', 'api/favorito', 'api/linhacarrinho', 'api/linhafatura', 'api/local', 'api/profile', 'api/zona',
                 'pluralize' => true,
-            ],
+            ],*/
         ],
     ],
     'params' => $params,
