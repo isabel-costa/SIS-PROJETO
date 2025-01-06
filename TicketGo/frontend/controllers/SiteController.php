@@ -15,6 +15,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use common\models\mqttPublisher;
 
 /**
  * Site controller
@@ -75,6 +76,8 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+
+        mqttPublisher::publish('teste', 'Mensagem de teste e é bom que funciones');
         return $this->render('index');
     }
 
