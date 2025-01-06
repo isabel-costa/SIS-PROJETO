@@ -85,4 +85,5 @@ class Profile extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Favoritos::class, ['profile_id' => 'id']);
     }
+
 }
