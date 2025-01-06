@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\helpers\Json;
 
 /**
  * This is the model class for table "Faturas".
@@ -87,5 +88,21 @@ class Fatura extends \yii\db\ActiveRecord
     public function getProfile()
     {
         return $this->hasOne(Profiles::class, ['id' => 'profile_id']);
+    }
+    public function afterSave($insert, $changedAttributes)
+    {
+
+        parent::afterSave($insert, $changedAttributes);
+
+        $idFatura = $this->id;
+        $topico = "ticketgo/fatura/{$idFatura}/save";
+
+
+        $jsonAttributes = Json::encode($this->attributes);
+
+        $mensagem= 'A Fatura foi criada ou modificada';
+
+        mqttPublisher::publish($topico,$jsonAttributes);
+        mqttPublisher::publish($topico,$mensagem);
     }
 }

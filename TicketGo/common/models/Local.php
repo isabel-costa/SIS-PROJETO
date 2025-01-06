@@ -2,7 +2,9 @@
 
 namespace app\models;
 
+use common\models\mqttPublisher;
 use Yii;
+use yii\helpers\Json;
 
 /**
  * This is the model class for table "Locais".
@@ -70,5 +72,21 @@ class Local extends \yii\db\ActiveRecord
     public function getZonas()
     {
         return $this->hasMany(Zonas::class, ['local_id' => 'id']);
+    }
+    public function afterSave($insert, $changedAttributes)
+    {
+
+        parent::afterSave($insert, $changedAttributes);
+
+        $idlocal = $this->id;
+        $topico = "ticketgo/local/{ $idlocal}/save";
+
+
+        $jsonAttributes = Json::encode($this->attributes);
+
+        $mensagem= 'O localfoi criado ou modificado';
+
+        mqttPublisher::publish($topico,$jsonAttributes);
+        mqttPublisher::publish($topico,$mensagem);
     }
 }

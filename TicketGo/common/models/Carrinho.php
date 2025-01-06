@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\helpers\Json;
 
 /**
  * This is the model class for table "Carrinhos".
@@ -64,5 +65,21 @@ class Carrinho extends \yii\db\ActiveRecord
     public function getProfile()
     {
         return $this->hasOne(Profiles::class, ['id' => 'profile_id']);
+    }
+    public function afterSave($insert, $changedAttributes)
+    {
+
+        parent::afterSave($insert, $changedAttributes);
+
+        $idCarrinho = $this->id;
+        $topico = "ticketgo/carrinho/{$idCarrinho}/save";
+
+
+        $jsonAttributes = Json::encode($this->attributes);
+
+        $mensagem= 'O carrinho foi criado ou modificado';
+
+        mqttPublisher::publish($topico,$jsonAttributes);
+        mqttPublisher::publish($topico,$mensagem);
     }
 }

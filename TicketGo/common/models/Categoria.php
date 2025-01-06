@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\helpers\Json;
 
 /**
  * This is the model class for table "Categorias".
@@ -54,5 +55,21 @@ class Categoria extends \yii\db\ActiveRecord
     public function getEventos()
     {
         return $this->hasMany(Eventos::class, ['categoria_id' => 'id']);
+    }
+    public function afterSave($insert, $changedAttributes)
+    {
+
+        parent::afterSave($insert, $changedAttributes);
+
+        $idCategoria = $this->id;
+        $topico = "ticketgo/categoria/{$idCategoria}/save";
+
+
+        $jsonAttributes = Json::encode($this->attributes);
+
+        $mensagem= 'A Categoria foi criada ou modificada';
+
+        mqttPublisher::publish($topico,$jsonAttributes);
+        mqttPublisher::publish($topico,$mensagem);
     }
 }

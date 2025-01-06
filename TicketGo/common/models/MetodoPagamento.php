@@ -2,7 +2,9 @@
 
 namespace app\models;
 
+use common\models\mqttPublisher;
 use Yii;
+use yii\helpers\Json;
 
 /**
  * This is the model class for table "MetodosPagamento".
@@ -51,5 +53,21 @@ class MetodoPagamento extends \yii\db\ActiveRecord
     public function getFaturas()
     {
         return $this->hasMany(Faturas::class, ['metodopagamento_id' => 'id']);
+    }
+    public function afterSave($insert, $changedAttributes)
+    {
+
+        parent::afterSave($insert, $changedAttributes);
+
+        $idmetodopagamento = $this->id;
+        $topico = "ticketgo/metodopagamento/{ $idmetodopagamento}/save";
+
+
+        $jsonAttributes = Json::encode($this->attributes);
+
+        $mensagem= 'O Metodo de pagamento foi criado ou modificado';
+
+        mqttPublisher::publish($topico,$jsonAttributes);
+        mqttPublisher::publish($topico,$mensagem);
     }
 }

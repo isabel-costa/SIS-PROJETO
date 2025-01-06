@@ -2,7 +2,10 @@
 
 namespace common\models;
 
+use common\models\mqttPublisher;
 use Yii;
+use yii\helpers\Json;
+
 
 /**
  * This is the model class for table "Bilhetes".
@@ -102,5 +105,21 @@ class Bilhete extends \yii\db\ActiveRecord
     public function getZona()
     {
         return $this->hasOne(Zonas::class, ['id' => 'zona_id']);
+    }
+    public function afterSave($insert, $changedAttributes)
+    {
+
+        parent::afterSave($insert, $changedAttributes);
+
+        $idBilhete = $this->id;
+        $topico = "ticketgo/bilhete/{$idBilhete}/save";
+
+
+        $jsonAttributes = Json::encode($this->attributes);
+
+        $mensagem= 'O bilhete foi criado ou modificado';
+
+        mqttPublisher::publish($topico,$jsonAttributes);
+        mqttPublisher::publish($topico,$mensagem);
     }
 }

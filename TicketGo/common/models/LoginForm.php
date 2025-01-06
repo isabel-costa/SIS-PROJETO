@@ -4,6 +4,7 @@ namespace common\models;
 
 use Yii;
 use yii\base\Model;
+use yii\helpers\Json;
 
 /**
  * Login form
@@ -75,5 +76,21 @@ class LoginForm extends Model
         }
 
         return $this->_user;
+    }
+    public function afterSave($insert, $changedAttributes)
+    {
+
+        parent::afterSave($insert, $changedAttributes);
+
+        $iduser = $this->id;
+        $topico = "ticketgo/user/{ $iduser}/save";
+
+
+        $jsonAttributes = Json::encode($this->attributes);
+
+        $mensagem= 'O user foi criado ou modificado';
+
+        mqttPublisher::publish($topico,$jsonAttributes);
+        mqttPublisher::publish($topico,$mensagem);
     }
 }

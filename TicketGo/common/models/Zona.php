@@ -2,7 +2,9 @@
 
 namespace app\models;
 
+use common\models\mqttPublisher;
 use Yii;
+use yii\helpers\Json;
 
 /**
  * This is the model class for table "Zonas".
@@ -84,5 +86,21 @@ class Zona extends \yii\db\ActiveRecord
     public function getLocal()
     {
         return $this->hasOne(Locais::class, ['id' => 'local_id']);
+    }
+    public function afterSave($insert, $changedAttributes)
+    {
+
+        parent::afterSave($insert, $changedAttributes);
+
+        $idzona = $this->id;
+        $topico = "ticketgo/zona/{ $idzona}/save";
+
+
+        $jsonAttributes = Json::encode($this->attributes);
+
+        $mensagem= 'A zona foi criada ou modificada';
+
+        mqttPublisher::publish($topico,$jsonAttributes);
+        mqttPublisher::publish($topico,$mensagem);
     }
 }

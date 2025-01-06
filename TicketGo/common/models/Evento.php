@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\helpers\Json;
 
 /**
  * This is the model class for table "Eventos".
@@ -121,5 +122,21 @@ class Evento extends \yii\db\ActiveRecord
     public function getZonas()
     {
         return $this->hasMany(Zonas::class, ['evento_id' => 'id']);
+    }
+    public function afterSave($insert, $changedAttributes)
+    {
+
+        parent::afterSave($insert, $changedAttributes);
+
+        $idEvento = $this->id;
+        $topico = "ticketgo/evento/{$idEvento}/save";
+
+
+        $jsonAttributes = Json::encode($this->attributes);
+
+        $mensagem= 'O Evento foi criado ou modificado';
+
+        mqttPublisher::publish($topico,$jsonAttributes);
+        mqttPublisher::publish($topico,$mensagem);
     }
 }
