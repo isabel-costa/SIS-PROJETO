@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\helpers\Json;
 
 /**
  * This is the model class for table "LinhasCarrinho".
@@ -73,5 +74,21 @@ class LinhaCarrinho extends \yii\db\ActiveRecord
     public function getCarrinho()
     {
         return $this->hasOne(Carrinhos::class, ['id' => 'carrinho_id']);
+    }
+    public function afterSave($insert, $changedAttributes)
+    {
+
+        parent::afterSave($insert, $changedAttributes);
+
+        $idlinhacarrinho = $this->id;
+        $topico = "ticketgo/linhacarrinho/{$idlinhacarrinho}/save";
+
+
+        $jsonAttributes = Json::encode($this->attributes);
+
+        $mensagem= 'A Linha Carrinho foi criada ou modificada';
+
+        mqttPublisher::publish($topico,$jsonAttributes);
+        mqttPublisher::publish($topico,$mensagem);
     }
 }

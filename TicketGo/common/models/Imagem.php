@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\helpers\Json;
 
 /**
  * This is the model class for table "Imagens".
@@ -56,5 +57,21 @@ class Imagem extends \yii\db\ActiveRecord
     public function getEvento()
     {
         return $this->hasOne(Eventos::class, ['id' => 'evento_id']);
+    }
+    public function afterSave($insert, $changedAttributes)
+    {
+
+        parent::afterSave($insert, $changedAttributes);
+
+        $idImagem = $this->id;
+        $topico = "ticketgo/imagem/{$idImagem}/save";
+
+
+        $jsonAttributes = Json::encode($this->attributes);
+
+        $mensagem= 'A Imagem foi criada ou modificada';
+
+        mqttPublisher::publish($topico,$jsonAttributes);
+        mqttPublisher::publish($topico,$mensagem);
     }
 }

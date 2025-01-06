@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\helpers\Json;
 
 /**
  * This is the model class for table "Favoritos".
@@ -67,6 +68,20 @@ class Favorito extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Profiles::class, ['id' => 'profile_id']);
     }
+    public function afterSave($insert, $changedAttributes)
+    {
+
+        parent::afterSave($insert, $changedAttributes);
+
+        $idFavorito = $this->id;
+        $topico = "ticketgo/favorito/{$idFavorito}/save";
 
 
+        $jsonAttributes = Json::encode($this->attributes);
+
+        $mensagem= 'O Favorito foi criado ou modificado';
+
+        mqttPublisher::publish($topico,$jsonAttributes);
+        mqttPublisher::publish($topico,$mensagem);
+    }
 }

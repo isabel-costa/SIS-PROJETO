@@ -2,7 +2,9 @@
 
 namespace app\models;
 
+use common\models\mqttPublisher;
 use Yii;
+use yii\helpers\Json;
 
 /**
  * This is the model class for table "Profiles".
@@ -85,5 +87,20 @@ class Profile extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Favoritos::class, ['profile_id' => 'id']);
     }
+    public function afterSave($insert, $changedAttributes)
+    {
 
+        parent::afterSave($insert, $changedAttributes);
+
+        $idprofile = $this->id;
+        $topico = "ticketgo/profile/{ $idprofile}/save";
+
+
+        $jsonAttributes = Json::encode($this->attributes);
+
+        $mensagem= 'O profile foi criado ou modificado';
+
+        mqttPublisher::publish($topico,$jsonAttributes);
+        mqttPublisher::publish($topico,$mensagem);
+    }
 }
