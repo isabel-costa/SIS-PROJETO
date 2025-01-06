@@ -82,4 +82,5 @@ class Carrinho extends \yii\db\ActiveRecord
         mqttPublisher::publish($topico,$jsonAttributes);
         mqttPublisher::publish($topico,$mensagem);
     }
+
 }

@@ -25,6 +25,8 @@ return [
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
+            'enableSession' => false,
+            'loginUrl' => null,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
         ],
         'session' => [
@@ -47,11 +49,73 @@ return [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            /*'rules' => [
-                'class' => 'yii\rest\UrlRule',
-                'controller' => 'api/bilhete', 'api/carrinho', 'api/categoria', 'api/evento', 'api/fatura', 'api/favorito', 'api/linhacarrinho', 'api/linhafatura', 'api/local', 'api/profile', 'api/zona',
-                'pluralize' => true,
-            ],*/
+            'rules' => [
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/bilhete',
+                    'pluralize' => true,
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/carrinho',
+                    'pluralize' => true,
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/categoria',
+                    'pluralize' => true,
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/evento',
+                    'pluralize' => true,
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/fatura',
+                    'pluralize' => true,
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/favorito',
+                    'pluralize' => true,
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/linhacarrinho',
+                    'pluralize' => true,
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/linhafatura',
+                    'pluralize' => true,
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/local',
+                    'pluralize' => true,
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/auth/profile',
+                    'pluralize' => true,
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/zona',
+                    'pluralize' => true,
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/auth/login',
+                    'pluralize' => false,
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/auth/signup',
+                    'pluralize' => false,
+                ],
+            ],
         ],
     ],
     'params' => $params,
