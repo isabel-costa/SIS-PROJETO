@@ -3,29 +3,27 @@ namespace backend\modules\api\controllers;
 
 use yii\filters\auth\QueryParamAuth;
 use yii\rest\ActiveController;
+use yii\web\ForbiddenHttpException;
 
 class MetodoPagamentoController extends ActiveController {
     public $modelClass = 'common\models\MetodoPagamento';
 
-    public function behaviors()
-    {
-        $behaviors = parent::behaviors(); $behaviors['authenticator'] = [
-        'class' => QueryParamAuth::className(),
-        //only=> ['index'], //Apenas para o GET
-    ];
-        return $behaviors;
-    }
-
     public function checkAccess($action, $model = null, $params = [])
     {
-        if ($action === 'delete') {
-            throw new \yii\web\ForbiddenHttpException('Não Autorizado!');
-
-        } else if ($action === 'post') {
-            throw new \yii\web\ForbiddenHttpException('Não Autorizado!');
-
-        } else if ($action === 'put') {
-            throw new \yii\web\ForbiddenHttpException('Não Autorizado!');
+        // Bloqueia qualquer método que não seja GET
+        if (in_array($action, ['create', 'update', 'delete'])) {
+            throw new \yii\web\ForbiddenHttpException('You are not allowed to perform this action');
         }
+    }
+
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+
+        $behaviors['authenticator'] = [
+            'class' => QueryParamAuth::class,
+        ];
+
+        return $behaviors;
     }
 }

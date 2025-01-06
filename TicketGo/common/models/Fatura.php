@@ -88,4 +88,5 @@ class Fatura extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Profiles::class, ['id' => 'profile_id']);
     }
+
 }
