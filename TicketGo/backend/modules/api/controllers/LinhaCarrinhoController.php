@@ -9,10 +9,12 @@ class LinhaCarrinhoController extends ActiveController {
 
     public function behaviors()
     {
-        $behaviors = parent::behaviors(); $behaviors['authenticator'] = [
-        'class' => QueryParamAuth::className(),
-        //only=> ['index'], //Apenas para o GET
-    ];
+        $behaviors = parent::behaviors();
+
+        $behaviors['authenticator'] = [
+            'class' => QueryParamAuth::class,
+        ];
+
         return $behaviors;
     }
 }

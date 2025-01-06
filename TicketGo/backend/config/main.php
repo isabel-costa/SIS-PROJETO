@@ -25,6 +25,8 @@ return [
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
+            'enableSession' => false,
+            'loginUrl' => null,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
         ],
         'session' => [
@@ -95,13 +97,23 @@ return [
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
-                    'controller' => 'api/profile',
+                    'controller' => 'api/auth/profile',
                     'pluralize' => true,
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'api/zona',
                     'pluralize' => true,
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/auth/login',
+                    'pluralize' => false,
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/auth/signup',
+                    'pluralize' => false,
                 ],
             ],
         ],

@@ -1,6 +1,7 @@
 <?php
 namespace backend\modules\api\controllers;
 
+use app\models\Profile;
 use yii\filters\auth\QueryParamAuth;
 use yii\rest\ActiveController;
 
@@ -9,10 +10,13 @@ class ProfileController extends ActiveController {
 
     public function behaviors()
     {
-        $behaviors = parent::behaviors(); $behaviors['authenticator'] = [
-        'class' => QueryParamAuth::className(),
-        //only=> ['index'], //Apenas para o GET
-    ];
+        $behaviors = parent::behaviors();
+
+        $behaviors['authenticator'] = [
+            'class' => QueryParamAuth::class,
+        ];
+
         return $behaviors;
     }
+
 }
