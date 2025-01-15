@@ -2,64 +2,73 @@
 
 namespace backend\controllers\api;
 
-use common\models\User;
 use Yii;
 use yii\rest\Controller;
+use yii\web\BadRequestHttpException;
+use yii\web\UnauthorizedHttpException;
+use common\models\User; // O modelo de usuários
 use yii\web\Response;
-use yii\web\ForbiddenHttpException;
 
-class AuthController extends Controller
+class AuthController extends ActiveController
 {
-    public function behaviors()
-    {
-        $behaviors = parent::behaviors();
-        // Aumente o suporte para CORS ou outras necessidades
-        return $behaviors;
-    }
+    // Desabilitar a validação CSRF para facilitar o login via API
+    public $enableCsrfValidation = false;
 
-    // Registo de um novo utilizador
-    public function actionSignup()
-    {
-        $model = new User();
-        $model->username = Yii::$app->request->post('username');
-        $model->password = Yii::$app->request->post('password');
-
-        // Validação do modelo
-        if ($model->signup()) {
-            return [
-                'status' => 'success',
-                'message' => 'User created successfully!',
-            ];
-        }
-
-        // Se não passou na validação
-        return [
-            'status' => 'error',
-            'message' => 'Failed to create user!',
-        ];
-    }
-
-    // Login de um utilizador
+    // Ação de Login
     public function actionLogin()
     {
-        $username = Yii::$app->request->post('username');
-        $password = Yii::$app->request->post('password');
+        $data = Yii::$app->request->get(); // Receber dados via query parameter
 
-        $user = User::find()->where(['username' => $username])->one();
-
-        if ($user && $user->validatePassword($password)) {
-            $accessToken = $user->generateAuthKey();
-            $user->save(); // Atualiza o token na bd
-
-            return [
-                'status' => 'success',
-                'access-token' => $accessToken, // Retorna o token de autenticação
-            ];
+        // Verifique se o nome de usuário e a senha foram fornecidos
+        if (empty($data['username']) || empty($data['password'])) {
+            throw new BadRequestHttpException('Missing required parameters.');
         }
 
+        // Encontre o usuário no banco de dados
+        $user = User::findOne(['username' => $data['username']]);
+
+        // Verifique se o usuário existe e se a senha é válida
+        if ($user === null || !$user->validatePassword($data['password'])) {
+            throw new UnauthorizedHttpException('Invalid credentials.');
+        }
+
+        // Gerar o auth key se não existir
+        if (empty($user->auth_key)) {
+            $user->generateAuthKey();  // Método que gera o auth key
+            if (!$user->save()) {
+                throw new UnauthorizedHttpException('Error generating auth key.');
+            }
+        }
+
+        // Retornar o auth key
+        return ['auth_key' => $user->auth_key];
+    }
+
+    // Ação para acessar dados protegidos
+    public function actionProtectedData()
+    {
+        $authKey = Yii::$app->request->get('auth_key'); // Pega o auth_key da query parameter
+
+        // Verificar se o auth_key foi fornecido
+        if (empty($authKey)) {
+            throw new UnauthorizedHttpException('Access token is missing.');
+        }
+
+        // Validar o auth_key
+        $user = User::findIdentityByAuthKey($authKey);
+        
+        if ($user === null) {
+            throw new UnauthorizedHttpException('Invalid auth key.');
+        }
+
+        // Retorne os dados protegidos
         return [
-            'status' => 'error',
-            'message' => 'Invalid username or password',
+            'message' => 'Protected data accessed!',
+            'user' => [
+                'id' => $user->id,
+                'username' => $user->username,
+                'email' => $user->email,
+            ]
         ];
     }
 }
