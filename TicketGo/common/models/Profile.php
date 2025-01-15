@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace common\models;
 
 use common\models\mqttPublisher;
 use Yii;
@@ -87,6 +87,7 @@ class Profile extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Favoritos::class, ['profile_id' => 'id']);
     }
+    
     public function afterSave($insert, $changedAttributes)
     {
 

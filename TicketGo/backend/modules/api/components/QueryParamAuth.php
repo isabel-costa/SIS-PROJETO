@@ -9,23 +9,15 @@ class QueryParamAuth extends AuthMethod
 {
     public function authenticate($user, $request, $response)
     {
-        $accessToken = Yii::$app->request->get('access-token'); //Obtém o parâmetro de consulta
-
-        if (empty($accessToken)) {
-            throw new UnauthorizedHttpException('Access token is missing');
+        $authToken = $request->getQueryParam('token');
+        if (!empty($authToken)) {
+            $identity = User::findIdentityByAccessToken($authToken);
+            if ($identity) {
+                return $identity;
+            }
+            throw new ForbiddenHttpException('No authentication');
         }
-
-        //Verificar a validade do token
-        //Exemplo de verificação simples
-        $userIdentity = \backend\models\User::findIdentityByAccessToken($accessToken);
-
-        if ($userIdentity === null) {
-            throw new UnauthorizedHttpException('Invalid access token');
-        }
-
-        //Se o token for válido, define o utilizador autenticado
-        Yii::$app->user->login($userIdentity);
-        return $userIdentity;
+        throw new ForbiddenHttpException('Sem Token');
     }
 }
 

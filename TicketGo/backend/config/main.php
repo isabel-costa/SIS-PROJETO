@@ -65,6 +65,13 @@ return [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'api/favorito',
                     'pluralize' => true,
+                    'extraPatterns' => [
+                        'GET {profile_id}' => 'profilefav', //actionGetProfile
+                    ],
+                    'tokens' => [
+                        '{profile_id}' => '<profile_id:\\d+>',
+                    ],
+                    
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
@@ -84,10 +91,6 @@ return [
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'api/profile',
-                    'extraPatterns' => [
-                    'GET {id}/favoritos' => 'favoritos',
-                    'GET {id}/carrinho' => 'carrinho',
-                    ]
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
@@ -118,8 +121,8 @@ return [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'api/auth/login',
                     'extraPatterns' => [
-                    'GET /api/auth/login' => 'api/auth/login',  // Endpoint de login
-                    'GET /api/auth/protected-data' => 'api/auth/protected-data',  // Endpoint protegido
+                    'POST /api/auth/login' => 'api/auth/login',  // Endpoint de login
+                    'POST /api/auth/protected-data' => 'api/auth/protected-data',  // Endpoint protegido
                     ]
                 ],
                 [
