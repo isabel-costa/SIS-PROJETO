@@ -19,6 +19,7 @@ return [
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
+            'enableCsrfValidation' => false,
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser', ]
         ],
@@ -62,6 +63,11 @@ return [
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/favorito',
+                    'pluralize' => true,
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
                     'controller' => 'api/categoria',
                     'pluralize' => true,
                 ],
@@ -77,8 +83,11 @@ return [
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
-                    'controller' => 'api/favorito',
-                    'pluralize' => true,
+                    'controller' => 'api/profile',
+                    'extraPatterns' => [
+                    'GET {id}/favoritos' => 'favoritos',
+                    'GET {id}/carrinho' => 'carrinho',
+                    ]
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
@@ -97,18 +106,21 @@ return [
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
-                    'controller' => 'api/auth/profile',
-                    'pluralize' => true,
-                ],
-                [
-                    'class' => 'yii\rest\UrlRule',
                     'controller' => 'api/zona',
                     'pluralize' => true,
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/user',
+                    'pluralize' => true,
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
                     'controller' => 'api/auth/login',
-                    'pluralize' => false,
+                    'extraPatterns' => [
+                    'GET /api/auth/login' => 'api/auth/login',  // Endpoint de login
+                    'GET /api/auth/protected-data' => 'api/auth/protected-data',  // Endpoint protegido
+                    ]
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
