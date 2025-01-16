@@ -1,8 +1,9 @@
 <?php
 namespace backend\modules\api\controllers;
 
-use yii\filters\auth\QueryParamAuth;
+use backend\modules\api\components\QueryParamAuth;
 use yii\rest\ActiveController;
+use common\models\mqttPublisher;
 
 class LinhaFaturaController extends ActiveController {
     public $modelClass = 'common\models\LinhaFatura';

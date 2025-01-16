@@ -3,8 +3,9 @@ namespace backend\modules\api\controllers;
 
 use common\models\Carrinho;
 use Yii;
-use yii\filters\auth\QueryParamAuth;
+use backend\modules\api\components\QueryParamAuth;
 use yii\rest\ActiveController;
+use common\models\mqttPublisher;
 
 class CarrinhoController extends ActiveController {
     public $modelClass = 'common\models\Carrinho';
