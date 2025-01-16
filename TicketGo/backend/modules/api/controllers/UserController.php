@@ -1,21 +1,18 @@
 <?php
 namespace backend\modules\api\controllers;
 
-use backend\modules\api\components\QueryParamAuth;
 use yii\rest\ActiveController;
-use common\models\mqttPublisher;
+use yii\filters\auth\QueryParamAuth;
 
-class LinhaCarrinhoController extends ActiveController {
-    public $modelClass = 'common\models\LinhaCarrinho';
+class UserController extends ActiveController {
+    public $modelClass = 'common\models\User';
 
     public function behaviors()
     {
         $behaviors = parent::behaviors();
-
         $behaviors['authenticator'] = [
             'class' => QueryParamAuth::class,
         ];
-
         return $behaviors;
     }
 }

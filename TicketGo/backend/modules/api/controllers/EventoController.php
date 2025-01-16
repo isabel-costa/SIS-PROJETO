@@ -2,7 +2,12 @@
 
 namespace backend\modules\api\controllers;
 
+use common\models\Evento;
+use Yii;
+use backend\modules\api\components\QueryParamAuth;
 use yii\rest\ActiveController;
+use yii\web\ForbiddenHttpException;
+use common\models\mqttPublisher;
 
 class EventoController extends ActiveController {
     

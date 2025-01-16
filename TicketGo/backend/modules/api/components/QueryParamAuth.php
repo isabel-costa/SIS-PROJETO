@@ -1,9 +1,11 @@
 <?php
-namespace backend\components;
+namespace backend\modules\api\components;
 
 use Yii;
+use common\models\User;
 use yii\filters\auth\AuthMethod;
 use yii\web\UnauthorizedHttpException;
+use yii\web\ForbiddenHttpException;
 
 class QueryParamAuth extends AuthMethod
 {

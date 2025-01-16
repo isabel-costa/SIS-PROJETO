@@ -55,6 +55,10 @@ return [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'api/bilhete',
                     'pluralize' => true,
+                    'extraPatterns' => [
+                        'GET {evento_id}' => 'getevento',
+                    ],
+
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
@@ -66,10 +70,9 @@ return [
                     'controller' => 'api/favorito',
                     'pluralize' => true,
                     'extraPatterns' => [
-                        'GET {profile_id}' => 'profilefav', //actionGetProfile
-                    ],
-                    'tokens' => [
-                        '{profile_id}' => '<profile_id:\\d+>',
+                        'GET {profile_id}' => 'getprofile', //actionGetProfile
+                        'POST {evento_id}' => 'addfav', //actionAddFav
+                        'DELETE {evento_id}' => 'deletefav', //actionDeleteFav
                     ],
                     
                 ],
@@ -91,11 +94,19 @@ return [
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'api/profile',
+                    'pluralize' => true,
+                    'extraPatterns' => [
+                        'PUT {profile_id}' => 'updateprofile',
+                    ],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/metodopagamento',
+                    'pluralize' => true,
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'api/linhacarrinho',
-                    'pluralize' => true,
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
@@ -119,16 +130,11 @@ return [
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
-                    'controller' => 'api/auth/login',
+                    'controller' => 'api/auth',
                     'extraPatterns' => [
                     'POST /api/auth/login' => 'api/auth/login',  // Endpoint de login
-                    'POST /api/auth/protected-data' => 'api/auth/protected-data',  // Endpoint protegido
+                    'POST /api/auth/signup' => 'api/auth/signup',  // Endpoint protegido
                     ]
-                ],
-                [
-                    'class' => 'yii\rest\UrlRule',
-                    'controller' => 'api/auth/signup',
-                    'pluralize' => false,
                 ],
             ],
         ],

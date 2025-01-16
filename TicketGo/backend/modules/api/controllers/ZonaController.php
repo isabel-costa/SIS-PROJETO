@@ -2,8 +2,10 @@
 
 namespace backend\modules\api\controllers;
 
+use common\models\Zona;
 use yii\rest\ActiveController;
 use yii\web\ForbiddenHttpException;
+use common\models\mqttPublisher;
 
 class ZonaController extends ActiveController {
     public $modelClass = 'common\models\Zona';

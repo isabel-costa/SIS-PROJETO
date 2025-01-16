@@ -1,9 +1,12 @@
 <?php
 namespace backend\modules\api\controllers;
 
-use yii\filters\auth\QueryParamAuth;
+use Yii;
+use backend\modules\api\components\QueryParamAuth;
 use yii\rest\ActiveController;
 use yii\web\ForbiddenHttpException;
+use common\models\MetodoPagamento;
+use common\models\mqttPublisher;
 
 class MetodoPagamentoController extends ActiveController {
     public $modelClass = 'common\models\MetodoPagamento';

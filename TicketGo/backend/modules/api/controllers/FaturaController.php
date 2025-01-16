@@ -4,8 +4,9 @@ namespace backend\modules\api\controllers;
 
 use common\models\Fatura;
 use Yii;
-use yii\filters\auth\QueryParamAuth;
+use backend\modules\api\components\QueryParamAuth;
 use yii\rest\ActiveController;
+use common\models\mqttPublisher;
 
 class FaturaController extends ActiveController {
     public $modelClass = 'common\models\Fatura';

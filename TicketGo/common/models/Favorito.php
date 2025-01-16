@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\models\mqttPublisher;
 use Yii;
 use yii\helpers\Json;
 
