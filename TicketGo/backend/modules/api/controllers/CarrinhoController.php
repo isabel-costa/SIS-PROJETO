@@ -21,4 +21,26 @@ class CarrinhoController extends ActiveController {
         return $behaviors;
     }
 
+    public function actionGetProfile($profile_id)
+    {
+        $carrinhos = $this->modelClass::find()->where(['profile_id' => $profile_id])->all();
+
+        if (!$carrinho) {
+            throw new NotFoundHttpException('Carrinho não encontrado para este perfil.');
+        }
+
+        return $carrinho;
+    }
+
+    public function actionGetLinhasCarrinho($profile_id)
+    {
+        $carrinho = Carrinho::findOne(['profile_id' => $profile_id]);
+
+        if (!$carrinho) {
+            throw new NotFoundHttpException('Carrinho não encontrado para este perfil.');
+        }
+
+        return $carrinho->linhasCarrinhos;
+    }
+
 }
