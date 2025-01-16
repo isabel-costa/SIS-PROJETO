@@ -64,6 +64,9 @@ return [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'api/carrinho',
                     'pluralize' => true,
+                    'extraPatterns' => [
+                        'GET {profile_id}' => 'getprofile',
+                    ],
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
